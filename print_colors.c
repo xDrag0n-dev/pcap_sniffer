@@ -32,11 +32,11 @@ int	printf_colored(char *color, char *format, ...)
 					count += printf("%u", ui);
 					break;
 				case 'c':
-					char c = va_arg(args, char);
+					char c = va_arg(args, int);
 					count += printf("%c", c);
 					break;
 				case 'x': /* hexadecimal */
-					unsigned char uc = va_arg(args, char);
+					unsigned char uc = va_arg(args, int);
 					count += printf("%x", uc);
 					break;
 				case '%': /* % */

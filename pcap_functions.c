@@ -10,7 +10,7 @@
 #include <netinet/if_ether.h>
 #include <pcap.h>
 
-void    hexdump(const char *buffer, int length)
+void    hexdump(const unsigned char *buffer, int length)
 {
         int     i;
 
@@ -79,6 +79,15 @@ int     apply_bpf_program(struct bpf_program *bpf, char filters[][30], bool *is_
         return (0);
 }
 
+void	print_mac_address(const uint8_t *addr, uint8_t length)
+{
+	if (!addr)
+		return ;
+
+	for (int i = 0; i < length; i++)
+		printf("%02X%c", addr[i], (i == length-1) ? ' ' : ':');
+}
+
 void    packet_handler(unsigned char *args, const struct pcap_pkthdr *header, const unsigned char *packet)
 {
         /* Do something for each packet in the loop here */
@@ -100,7 +109,11 @@ void    packet_handler(unsigned char *args, const struct pcap_pkthdr *header, co
         snprintf(dst_port, sizeof(dst_port), "%d", ntohs(tcp->th_dport));
 
         printf_colored(YELLOW, "Got a %d/%d bytes packet (#%d):\n\n", header->len, header->caplen, counter++);
-        printf_colored(BLUE, "\tSource IP Address: %s -> Source Port: %s\n", src_ip, src_port);
+        printf_colored(BLUE, "\tSource MAC Address: ");
+	print_mac_address(eth->ether_shost, ETHER_ADDR_LEN);
+	printf_colored(BLUE, " -> Dest. MAC Address: ");
+	print_mac_address(eth->ether_dhost, ETHER_ADDR_LEN);
+	printf_colored(BLUE, "\n\tSource IP Address: %s -> Source Port: %s\n", src_ip, src_port);
         printf_colored(BLUE, "\tDest.  IP Address: %s -> Dest.  Port: %s\n", dst_ip, dst_port);
         printf_colored(BLUE, "\tSequence Number: %u\n", ntohs(tcp->th_seq));
         printf_colored(BLUE, "\tACK Number: %u\n", ntohs(tcp->th_ack));

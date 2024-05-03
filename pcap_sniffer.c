@@ -5,44 +5,40 @@
 #include "print_colors.h"
 #include <errno.h>
 #include <string.h>
+#include <limits.h>
 #include "pcap_header.h"
 
 int	main(int argc, char **argv)
 {
-	struct	pcap_pkthdr	header;
+	//struct	pcap_pkthdr	header;
 	struct	bpf_program	filt[6];
-	const unsigned char	*packet;
+	//const unsigned char	*packet;
 	char			errbuf[PCAP_ERRBUF_SIZE];
 	pcap_if_t		*alldevs, *dev;
 	char			interface[50];
 	pcap_t			*pcap_handle;
-	int			i, c, nb_pkt, option_index = 0;
+	int			c, nb_pkt, option_index = 0;
 	char			filters[6][30] = {"", "src port ", "dst port ", "src ", "dst ", "portrange "};
 	bool			is_set[6] = {0, 0, 0, 0, 0, 0};
-	bool			verbose = 0;
 
 	if (argc < 2 || !strncmp(argv[1], "--help", 7))
 	{
-		printf_colored(YELLOW, "\n%s [-vipln [filters: s|d|S|D|r]]\n", basename(argv[0]));
-		printf_colored(YELLOW, "  -v:"); printf(" verbose mode\n");
+		printf_colored(YELLOW, "\n%s [-ipln [filters: s|d|S|D|r]]\n", basename(argv[0]));
 		printf_colored(YELLOW, "  -i <interface>:"); printf(" interface on which to sniff\n");
 		printf_colored(YELLOW, "  -p <protocol>:"); printf(" protocol to sniff\n");
-		printf_colored(YELLOW, "  -s <source port>: "); printf("source port to filter (e.g: -sP 80)\n");
+		printf_colored(YELLOW, "  -s <source port>: "); printf("source port to filter\n");
 		printf_colored(YELLOW, "  -d <dest. port>: "); printf("destination port to filter\n");
 		printf_colored(YELLOW, "  -S <source IP>: "); printf("source IP to filter\n");
 		printf_colored(YELLOW, "  -D <dest. IP>: "); printf("destination IP to filter");
-		printf_colored(YELLOW, "  -r <port range>: "); printf("port range (e.g: -pR 10-500)\n");
+		printf_colored(YELLOW, "  -r <port range>: "); printf("port range (from x-y)\n");
 		printf_colored(YELLOW, "  -l:"); printf(" list all network interfaces\n");
 		printf_colored(YELLOW, "  -n <# of packets>:"); printf(" number of packet to sniff (10 by default)\n");
 		printf_colored(YELLOW, "  --help:"); printf(" displays this menu\n");
 		return (-1);
 	}
 
-	while ((c = getopt_long(argc, argv, "v:i:p:s:d:S:D:r:n:lh", long_opt, &option_index)) != -1) {
+	while ((c = getopt_long(argc, argv, "i:p:s:d:S:D:r:n:lh", long_opt, &option_index)) != -1) {
 		switch (c) {
-			case 'v':
-				verbose = 1;
-				break;
 			case 'i':
 				strncpy(interface, optarg, 50);
 				break;
@@ -77,6 +73,8 @@ int	main(int argc, char **argv)
 				nb_pkt = atoi(optarg);
 				if (nb_pkt <= 0)
 					nb_pkt = 10;
+				if (nb_pkt > INT_MAX || nb_pkt < INT_MIN)
+					return (-1);
 				break;
 			case '?':
 				if (optopt == 'i' || optopt == 'p' || optopt == 'n'
@@ -94,7 +92,6 @@ int	main(int argc, char **argv)
 
 		for (int index = optind; index < argc; index++)
 		{
-			printf_colored(RED, "Non option argument\n");
 		}
 	}
 
@@ -108,7 +105,7 @@ int	main(int argc, char **argv)
 		exit(1);
 	}
 
-	printf("%s\n", interface);
+	printf("interface: %s\nnb_pkt=%d", interface, nb_pkt);
 	for (dev = alldevs; strncmp(dev->name, interface, 50); dev = dev->next)
 	{
 		if (strncmp(dev->name, interface, 50) && dev->next == NULL) {
