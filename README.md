@@ -14,26 +14,38 @@
 <b>INSTALLATION:</b>
   - The source code must be compiled with gcc/clang (or any other compiler)
   - You must have "libpcap0.8-dev" installed:
-  - sudo apt install libpcap0.8-dev
+
+   <code>sudo apt install libpcap0.8-dev</code>
+
   - then build with the following command (with GCC):
-  - gcc pcap_sniffer.c pcap_functions.c print_colors.c -o pcap_sniffer -lcap
+    
+   <code>gcc pcap_sniffer.c pcap_functions.c print_colors.c -o pcap_sniffer -lcap</code>
+   
   - Enjoy the sniffer (with a lot of colors!)
 
 <b>USAGE:</b>
-  - sudo ./pcap_sniffer --help:
-  -  -i <interface>: interface on which to sniff
-  -  -p <protocol>: protocol to sniff
-  -  -s <source port>: source port to filter
-  -  -d <dest. port>: destination port to filter
-  -  -S <source IP>: source IP to filter
-  -  -D <dest. IP>: destination IP to filter  -r <port range>: port range (from x-y)
-  -  -l: list all network interfaces
-  -  -n <# of packets>: number of packet to sniff (10 by default)
-  -  --help: displays this menu
+
+<code>sudo ./pcap_sniffer --help
+    -i <interface>: interface on which to sniff
+    -p <protocol>: protocol to sniff
+    -s <source port>: source port to filter
+    -d <dest. port>: destination port to filter
+    -S <source IP>: source IP to filter
+    -D <dest. IP>: destination IP to filter
+    -r <port range>: port range (from x-y)
+    -l: list all network interfaces
+    -n <# of packets>: number of packet to sniff (10 by default)
+    --help: displays this menu</code>
 
 <b>EXAMPLES:</b>
-  - "sudo ./pcap_sniffer -i wlan0 -n 100"         --> sniffs for 100 packets on interface "wlan0"
-  - "sudo ./pcap_sniffer -i wlan0 -n 100 -p tcp"  --> sniffs for 100 TCP packets on interface "wlan0"
+
+Sniffs for 100 packets on interface wlan0:
+
+<code>sudo ./pcap_sniffer -i wlan0 -n 100</code>
+
+Sniffs for 100 TCP packet on interface wlan0:
+
+<code>sudo ./pcap_sniffer -i wlan0 -n 100 -p tcp</code>
 
 <b>SCREENSHOTS:</b>
 
