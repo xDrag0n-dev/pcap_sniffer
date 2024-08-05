@@ -50,3 +50,8 @@ Sniffs for 100 TCP packet on interface wlan0:
 <b>SCREENSHOTS:</b>
 
 ![Screenshot from 2024-08-04 22-01-58](https://github.com/user-attachments/assets/56820d4f-968b-4de5-9dc6-a9c2275fe5f0)
+
+<b>CONTRIBUTING:</b>
+
+Contributions are welcome! If you encounter any bugs or have suggestions for improvement,
+please submit an issue or pull request. Make sure to follow our Contributing Guidelines when submitting changes.
