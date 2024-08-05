@@ -14,9 +14,9 @@
 <b>INSTALLATION:</b>
   - The source code must be compiled with gcc/clang (or any other compiler)
   - You must have "libpcap0.8-dev" installed:
-  --> sudo apt install libpcap0.8-dev
+  - sudo apt install libpcap0.8-dev
   - then build with the following command (with GCC):
-  --> gcc pcap_sniffer.c pcap_functions.c print_colors.c -o pcap_sniffer -lcap
+  - gcc pcap_sniffer.c pcap_functions.c print_colors.c -o pcap_sniffer -lcap
   - Enjoy the sniffer (with a lot of colors!)
 
 <b>USAGE:</b>
